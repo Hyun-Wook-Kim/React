@@ -1,74 +1,85 @@
 import React, {useRef, useState} from 'react';
-import CreateGame from './CreateGame';
-
-import GameList from './GameList'
+import Booklist from './Booklist'
+import CreateBook from './CreateBook';
 
 function App() {
 
+  // 새로운 book을 만드는데 사용할 props (title 과 author를 지정)
   const [inputs, setInputs] = useState({
-    gamename : '',
-    year : ''
+    title:'',
+    author : ''
   });
-
-  const {gamename, year} = inputs;
-
+  
+  const {title, author} = inputs;
+  
+  // onChange 함수에서 이용할 name과 value를 지정
   const onChange = (e) => {
-    const {name, value} = e.target;
+    const{name, value} = e.target;
     setInputs({
       ...inputs,
       [name] : value
-    });
+    })
   }
 
-
-  const [games, setGames] = useState([
-    {
-      id:1,
-      gamename:'Bag',
-      year : '2012'
-  },
-  {
-      id:2,
-      gamename:'LOL',
-      year : '2016'
-  },
-  {
-      id:3,
-      gamename:'LostArk',
-      year : '2018'
-  }
+  // 배열 books를 props 형태로 바꿈 
+  const [books, setBooks] = useState([
+      {
+          num : 1,
+          title : 'What is Justice?' ,
+          author : 'Kim'
+      },
+      {
+          num : 2,
+          title : 'martion' ,
+          author : 'Hyun'
+      },
+      {
+          num : 3,
+          title : 'Demian' ,
+          author : 'Wook'
+      }
+  
   ]);
 
+  // num( index역할)에 쓸 다음 값. 기본은 4
+  const nextNum = useRef(4);
 
-
-  const nextId = useRef(4);
-
-
+  // 버튼을 누르면 input에 들어간 값과 nextnum으로 이루어진 book 객체 생성
   const onCreate = ()=>{
-    const newGame = {
-      id:nextId.current,
-      gamename,
-      year
+
+    const book = {
+      num : nextNum.current,
+      title,
+      author
     };
 
-    setGames([...games, newGame]);
+    // spread나 concat를 이용해 기존 배열에 새로운 book을 추가
 
+    // spred를 이용한 배열 추가 방법
+    // setBooks([...books, book]);
+
+    // concat를 이용한 배열 추가 방법
+    // concat는 기존의 배열을 바꾸지 않고 추가함
+    setBooks(books.concat(book));
+
+
+    // 추가하고 나면 input 칸이 비워지도록 함
     setInputs({
-      gamename:'',
-      year:''
-    }) 
-    nextId.current += 1
-  };
+      title:'',
+      author : ''
+    })
 
-  return(
-    <>
-    
-    <CreateGame gamename = {gamename} year = {year} onChange = {onChange} onCreate = {onCreate}/>
-    <GameList games = {games}></GameList>
+    nextNum.current += 1;
 
-    </>
+  }
 
-  )
+return(
+  <>
+    <CreateBook onCreate = {onCreate} title = {title} onChange = {onChange} author = {author}></CreateBook>
+    <Booklist book = {books}></Booklist>
+  </>
+
+)
 }
 
 export default App;
