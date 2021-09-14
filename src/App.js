@@ -26,17 +26,20 @@ function App() {
       {
           num : 1,
           title : 'What is Justice?' ,
-          author : 'Kim'
-      },
-      {
+          author : 'Kim',
+          highlight : true
+        },
+        {
           num : 2,
           title : 'martion' ,
-          author : 'Hyun'
-      },
-      {
+          author : 'Hyun',
+          highlight : false
+        },
+        {
           num : 3,
           title : 'Demian' ,
-          author : 'Wook'
+          author : 'Wook',
+          highlight : false
       }
   
   ]);
@@ -71,12 +74,22 @@ function App() {
 
     nextNum.current += 1;
 
+  };
+                    // 여기에는 중괄호를 치면 안된다카이... why??
+                    // 이건 Javascript의 변수가 아니라, Book Component에서 받아오는 bookInfo.num에 대입되는 변수라?
+  const onRemove = (num)=>{
+    setBooks(books.filter(book => book.num !== num))
+  }
+
+
+  const onToggle = (num) => {
+    setBooks(books.map(book => book.num === num? {...book, highlight : !book.highlight} : book))
   }
 
 return(
   <>
     <CreateBook onCreate = {onCreate} title = {title} onChange = {onChange} author = {author}></CreateBook>
-    <Booklist book = {books}></Booklist>
+    <Booklist book = {books} onRemove = {onRemove} onToggle = {onToggle}></Booklist>
   </>
 
 )
